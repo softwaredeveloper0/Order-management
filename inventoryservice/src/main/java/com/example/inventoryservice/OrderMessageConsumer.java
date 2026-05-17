@@ -1,15 +1,11 @@
 package com.example.inventoryservice;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.inventoryservice.ProductMessage;
-
 
 @Service
-@RequiredArgsConstructor
 public class OrderMessageConsumer {
 
     @Autowired

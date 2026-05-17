@@ -5,11 +5,8 @@ import java.io.Serializable;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Data;
 
-
-@Data
-public class OrderMessage implements Serializable{
+public class OrderMessage implements Serializable {
         
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)

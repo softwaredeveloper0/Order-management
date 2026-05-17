@@ -10,15 +10,12 @@ import org.springframework.stereotype.Service;
 public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
-    private final ProductMessageConsumer consumer;
     private final OrderMessageProducer orderMessageProducer;
 
     public InventoryService(InventoryRepository inventoryRepository,
-                            OrderMessageProducer orderMessageProducer,
-                            ProductMessageConsumer consumer) {
+                            OrderMessageProducer orderMessageProducer) {
         this.inventoryRepository = inventoryRepository;
         this.orderMessageProducer = orderMessageProducer;
-        this.consumer = consumer;
     }
 
     public ResponseEntity<?> UpdateInventory(String productId, Long buyingStock) {
@@ -36,8 +33,10 @@ public class InventoryService {
             InventoryEntity product = inventoryRepository.findByProductId(productId)
                     .orElseThrow(() -> new IllegalArgumentException("Product not found for id: " + productId));
 
-            long total = product.getTotalStock() == null ? 0L : product.getTotalStock();
-            long reserved = product.getReservedStock() == null ? 0L : product.getReservedStock();
+            Long totalStock = product.getTotalStock();
+            long total = totalStock == null ? 0L : totalStock;
+            Long reservedStock = product.getReservedStock();
+            long reserved = reservedStock == null ? 0L : reservedStock;
             long available = total - reserved;
 
             if (buyingStock > available) {
@@ -127,7 +126,8 @@ public class InventoryService {
             }
 
             InventoryEntity inv = existingOpt.get();
-            long oldStock = inv.getTotalStock() == null ? 0L : inv.getTotalStock();
+            Long currentStock = inv.getTotalStock();
+            long oldStock = currentStock == null ? 0L : currentStock;
             inv.setTotalStock(oldStock + stock);
             inventoryRepository.save(inv);
             return ResponseEntity.ok("stock updated");

@@ -1,8 +1,5 @@
 package com.example.inventoryservice;
 
-import lombok.Data;
-
-@Data
 public class InventoryRequest {
 
     private String productId;
