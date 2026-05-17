@@ -2,9 +2,9 @@ name: Inventory CI CD
 
 on:
   push:
-    branches: ['main']   
+    branches: ['inventory-service/**']   
   pull_request:
-    branches: ['main']
+    branches: ['inventory-service/**']
     
 
 jobs:
