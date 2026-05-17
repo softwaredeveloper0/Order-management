@@ -2,9 +2,9 @@ name: Order CI CD
 
 on:
   push:
-    branches: ['order-service/**']   
+    branches: ['main']   
   pull_request:
-    branches: ['order-service/**']
+    branches: ['main']
     
 
 jobs:
@@ -15,6 +15,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
+    defaults:
+      run:
+        working-directory: orderservice
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
