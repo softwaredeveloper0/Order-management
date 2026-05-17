@@ -41,9 +41,13 @@ public class InventoryEntity {
     private Long reservedStock;
 
     @Transient
-    private Long AvailableStock(){
+    public Long getAvailableStock() {
+        if (totalStock == null || reservedStock == null) {
+            return null;
+        }
         return totalStock - reservedStock;
     }
+
     @Version
     private Long version;
 
