@@ -2,9 +2,9 @@ name: Product CI CD
 
 on:
   push:
-    branches: ['product-service/**']   
+    branches: ['productservice/**']   
   pull_request:
-    branches: ['product-service/**']
+    branches: ['productservice/**']
     
 
 jobs:

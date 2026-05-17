@@ -33,7 +33,7 @@ public class ProductService {
     );
     
 
-        return ResponseEntity.ok("Product created successfully");
+        return ResponseEntity.ok("Product created successfully.");
     }
 
     public ProductDTO User(@RequestParam String name){
