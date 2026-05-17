@@ -123,7 +123,7 @@ public class InventoryService {
             Optional<InventoryEntity> existingOpt = inventoryRepository.findByProductId(proId);
             if (existingOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Inventory not found for product: " + proId);
+                        .body("Inventory not founds for product: " + proId);
             }
 
             InventoryEntity inv = existingOpt.get();
