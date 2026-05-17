@@ -17,7 +17,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: inventory-service
+        working-directory: inventoryservice
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,6 +29,6 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn clean install
+        run: ./mvnw clean install
 
  
