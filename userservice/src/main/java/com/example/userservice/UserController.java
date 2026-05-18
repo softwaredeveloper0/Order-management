@@ -54,7 +54,7 @@ public class UserController {
         userRepository.save(users);
 
 
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseEntity.ok("User registered successfully.");
 
     }
     @PostMapping("/login")
