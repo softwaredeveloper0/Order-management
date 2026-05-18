@@ -34,7 +34,13 @@ jobs:
         run: ./mvnw clean install 
 
   
+  docker:
+      runs-on: ubuntu-latest
 
+      defaults:
+        run:
+          working-directory: orderservice
+      steps:
               
       -
           name: Checkout
@@ -59,4 +65,7 @@ jobs:
             file: ./orderservice/Dockerfile
             push: true
             tags: user/app:latest
+
+      - name: Build with Maven
+        run: ./mvnw clean install 
  
