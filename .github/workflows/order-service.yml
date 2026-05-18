@@ -67,6 +67,6 @@ jobs:
           context: ./orderservice
           file: ./orderservice/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/orderservice:latest
+          tags: samurai725/orderservice:latest
 
       
