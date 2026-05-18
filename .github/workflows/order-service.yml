@@ -58,7 +58,8 @@ jobs:
           name: Build and push
           uses: docker/build-push-action@v4
           with:
-            context: .
+            context: ./inventoryservice
+            file: ./inventoryservice/Dockerfile
             push: true
             tags: user/app:latest
  
