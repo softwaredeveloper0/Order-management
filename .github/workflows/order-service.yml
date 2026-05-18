@@ -40,6 +40,7 @@ jobs:
           path: target
 
   docker:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
