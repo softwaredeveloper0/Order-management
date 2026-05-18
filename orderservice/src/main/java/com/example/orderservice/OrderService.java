@@ -26,7 +26,7 @@ public class OrderService {
         
         // Validate order data
         if (order.getProductId() == null || order.getProductId().isEmpty()) {
-            return ResponseEntity.badRequest().body("Product ID is required.");
+            return ResponseEntity.badRequest().body("Product ID is required");
         }
         
         if (order.getQuantity() == null || order.getQuantity() <= 0) {
