@@ -49,7 +49,7 @@ public class OrderService {
             
             // Additional null check for safety
             if (product == null || product.getPrice() == null) {
-                return ResponseEntity.badRequest().body("Product price information is missing");
+                return ResponseEntity.badRequest().body("Product price information is missing.");
             }
             
             // Validate price - compare with actual product price
