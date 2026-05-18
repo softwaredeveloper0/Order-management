@@ -7,3 +7,6 @@ spring.jpa.hibernate.ddl-auto=create-drop
 
 spring.rabbitmq.listener.simple.auto-startup=false
 spring.rabbitmq.listener.direct.auto-startup=false
+
+eureka.client.enabled=false
+spring.cloud.config.enabled=false
