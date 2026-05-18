@@ -46,11 +46,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download target artifact
-        uses: actions/download-artifact@v4
+      - name: Upload target jar
+        uses: actions/upload-artifact@v4
         with:
           name: orderservice-target
-          path: orderservice/target
+          path: orderservice/target/*.jar
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
