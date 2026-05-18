@@ -28,6 +28,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      
+
       - name: Build with Maven
         run: ./mvnw clean install 
 
@@ -38,6 +40,9 @@ jobs:
         run:
           working-directory: orderservice
       steps:
+
+        - name: Build Jar
+          run: ./mvnw clean package -DskipTests        
         -
           name: Checkout
           uses: actions/checkout@v3
