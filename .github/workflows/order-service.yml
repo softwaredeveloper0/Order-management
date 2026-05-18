@@ -37,7 +37,7 @@ jobs:
 
       defaults:
         run:
-          working-directory: inventoryservice
+          working-directory: orderservice
       steps:
         -
           name: Checkout
@@ -58,8 +58,8 @@ jobs:
           name: Build and push
           uses: docker/build-push-action@v4
           with:
-            context: ./inventoryservice
-            file: ./inventoryservice/Dockerfile
+            context: ./orderservice
+            
             push: true
             tags: user/app:latest
  
