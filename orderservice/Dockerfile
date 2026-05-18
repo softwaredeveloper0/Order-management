@@ -2,7 +2,7 @@ FROM eclipse-temurin:17 AS builder
 
 WORKDIR /app
 
-COPY target/*.jar app.jar
+COPY . .
 
 RUN mvn clean package -DskipTests
 
