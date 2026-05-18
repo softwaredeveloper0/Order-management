@@ -56,4 +56,4 @@ jobs:
           with:
             context: .
             push: true
-            tags: user/app:latest
+            tags: samurai725/orderservice:latest
