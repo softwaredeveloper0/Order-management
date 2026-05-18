@@ -41,6 +41,10 @@ jobs:
         run:
           working-directory: orderservice
       steps:
+
+      - name: Check target folder
+        run: ls -la target
+        working-directory: orderservice        
               
       -
           name: Checkout
