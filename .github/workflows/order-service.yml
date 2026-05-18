@@ -40,16 +40,13 @@ jobs:
           path: target
 
   docker:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download target artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: orderservice-target
-          path: orderservice/target
+      
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -64,7 +61,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./orderservice
-          file: ./orderservice/Dockerfile
+          file: Dockerfile
           push: true
           tags: samurai725/orderservice:latest
 
