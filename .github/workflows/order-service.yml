@@ -61,8 +61,8 @@ jobs:
           name: Build and push
           uses: docker/build-push-action@v4
           with:
-            context: .
-            file: Dockerfile
+            context: ./orderservice
+            file: ./orderservice/Dockerfile
             push: true
             tags: samurai725/orderservice:latest
 
