@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import java.util.List;
 
 
 
@@ -17,33 +16,49 @@ public class OrderMessageConsumer {
     private OrderRepository orderRepository;
     
 
-    @RabbitListener(queues = "orderQueue")
+    @RabbitListener(queues = RabbitMQConfig.INVENTORY_QUEUE)
     public void consume(OrderMessage message) {
 
-        System.out.println("Received message from inventory service: " + message);
+        System.out.println("Received inventory confirmation from inventory service: " + message);
+        System.out.println("Order ID: " + message.getOrderId());
         System.out.println("Product ID: " + message.getProductId());
-        System.out.println("Stock: " + message.getStock());
+        System.out.println("Status: " + message.getStatus());
+        System.out.println("Available Stock: " + message.getStock());
 
-        // Update orders for this product based on stock availability
-        if (message.getProductId() != null && message.getStock() != null) {
-            List<OrderEntity> orders = orderRepository.findAll();
-            
-            for (OrderEntity order : orders) {
-                if (order.getProductId() != null && order.getProductId().equals(message.getProductId())) {
-                    // Update order status based on stock availability
-                    if (message.getStock() >= order.getQuantity()) {
-                        order.setStatus("CONFIRMED");
-                        System.out.println("Order " + order.getOrderId() + " confirmed - sufficient stock available");
-                    } else {
-                        order.setStatus("PENDING");
-                        System.out.println("Order " + order.getOrderId() + " pending - insufficient stock");
-                    }
-                    orderRepository.save(order);
-                }
-            }
+        // Only process reservation confirmations
+        if (message.getOrderId() == null || message.getProductId() == null) {
+            System.out.println("Invalid confirmation message - missing orderId or productId");
+            return;
         }
 
-        System.out.println("Order status updated based on inventory information");
+        try {
+            OrderEntity order = orderRepository.findByOrderId(message.getOrderId()).orElse(null);
+            if (order == null) {
+                System.out.println("Order not found: " + message.getOrderId());
+                return;
+            }
+
+            // Only update orders that are in RESERVED status
+            if (!"RESERVED".equals(order.getStatus())) {
+                System.out.println("Order " + message.getOrderId() + " is not in RESERVED status, skipping update");
+                return;
+            }
+
+            // Check reservation confirmation status
+            if ("RESERVATION_CONFIRMED".equals(message.getStatus())) {
+                order.setStatus("CONFIRMED");
+                System.out.println("Order " + message.getOrderId() + " confirmed - stock reservation successful");
+            } else if ("RESERVATION_FAILED".equals(message.getStatus())) {
+                order.setStatus("PENDING");
+                System.out.println("Order " + message.getOrderId() + " set to pending - insufficient stock");
+            }
+
+            orderRepository.save(order);
+            System.out.println("Order " + message.getOrderId() + " status updated to: " + order.getStatus());
+        } catch (Exception e) {
+            System.err.println("Error processing inventory confirmation for order " + message.getOrderId() + ": " + e.getMessage());
+            e.printStackTrace();
+        }
     }
     
 }

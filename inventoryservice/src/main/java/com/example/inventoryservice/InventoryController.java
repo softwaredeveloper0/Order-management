@@ -36,16 +36,16 @@ public class InventoryController {
     @Transactional
     @PostMapping("/inventory/update")
     public ResponseEntity<?> updateInventory(@RequestBody String productId,Long buyingStock){
-
-
-
         return inventoryService.UpdateInventory(productId, buyingStock);
     }
-        @PostMapping("/inventory/updatestock")
+
+    @PostMapping("/inventory/reserve")
+    public ResponseEntity<?> reserveInventory(@RequestBody InventoryRequest req) {
+        return inventoryService.reserveInventory(req);
+    }
+
+    @PostMapping("/inventory/updatestock")
     public ResponseEntity<?> updateStock(@RequestBody InventoryRequest req){
-
-
-
         return ResponseEntity.ok(inventoryService.updateStock(req));
     }
 

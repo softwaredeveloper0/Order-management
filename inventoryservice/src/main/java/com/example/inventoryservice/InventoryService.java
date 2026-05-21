@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class InventoryService {
@@ -18,6 +19,7 @@ public class InventoryService {
         this.orderMessageProducer = orderMessageProducer;
     }
 
+    @Transactional
     public ResponseEntity<?> UpdateInventory(String productId, Long buyingStock) {
         try {
             if (productId == null || productId.isBlank()) {
@@ -54,6 +56,35 @@ public class InventoryService {
         }
     }
 
+    @Transactional
+    public ResponseEntity<?> reserveInventory(InventoryRequest req) {
+        try {
+            if (req == null) {
+                return ResponseEntity.badRequest().body("Request body must not be null");
+            }
+            if (req.getProductId() == null || req.getProductId().isBlank()) {
+                return ResponseEntity.badRequest().body("Product id must not be null or blank");
+            }
+            if (req.getStock() == null || req.getStock() <= 0) {
+                return ResponseEntity.badRequest().body("Stock must be greater than 0");
+            }
+
+            boolean exists = inventoryRepository.findByProductId(req.getProductId()).isPresent();
+            if (!exists) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found for id: " + req.getProductId());
+            }
+
+            int updatedRows = inventoryRepository.reserveStock(req.getProductId(), req.getStock());
+            if (updatedRows > 0) {
+                return ResponseEntity.ok("Stock reserved successfully");
+            }
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Insufficient stock for product: " + req.getProductId());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred while reserving inventory.");
+        }
+    }
+
     public ResponseEntity<?> GetInventory(String productId) {
         try {
             if (productId == null || productId.isBlank()) {
@@ -69,6 +100,7 @@ public class InventoryService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> createStock(InventoryRequest req) {
         try {
             if (req == null) {
@@ -104,6 +136,7 @@ public class InventoryService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> updateStock(InventoryRequest req) {
         try {
             if (req == null) {

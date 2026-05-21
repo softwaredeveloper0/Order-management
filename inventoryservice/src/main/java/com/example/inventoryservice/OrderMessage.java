@@ -10,23 +10,19 @@ public class OrderMessage implements Serializable {
         
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)
-    private Long orderId;
+    private String orderId;
     private String productId;
     private Double price;
     private Long stock;
     private String status;
     private Long ReservedStock;
 
-    public OrderMessage(String productId, Long stock){
+    
 
-        this.productId = productId;
-        this.stock = stock;
-    }
-
-    public OrderMessage(Long orderId, Integer quantity){
+    public OrderMessage(String orderId, Long stock){
 
         this.orderId = orderId;
-        this.stock = quantity != null ? quantity.longValue() : null;
+        this.stock = stock;
     }
 
     
@@ -35,10 +31,10 @@ public class OrderMessage implements Serializable {
     }
 
 
-    public Long getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
-    public void setOrderId(Long orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
     public String getProductId() {

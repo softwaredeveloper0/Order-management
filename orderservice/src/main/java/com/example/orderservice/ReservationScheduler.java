@@ -32,6 +32,15 @@ public class ReservationScheduler {
             }
         }
     }
+
+    @Scheduled(fixedRate = 60000)
+    public void removeOldCancelledOrders() {
+        LocalDateTime threshold = LocalDateTime.now().minusMinutes(5);
+        int deleted = orderRepository.deleteCancelledOrdersOlderThan(threshold);
+        if (deleted > 0) {
+            System.out.println("Deleted " + deleted + " cancelled order(s) older than 5 minutes.");
+        }
+    }
     
     private void cancelExpiredReservation(OrderEntity order) {
         System.out.println("Cancelling expired reservation for order: " + order.getOrderId());

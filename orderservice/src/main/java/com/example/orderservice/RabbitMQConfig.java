@@ -4,6 +4,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
@@ -35,10 +36,34 @@ public class RabbitMQConfig {
                 .with(ORDER_KEY);
     }
 
+    public static final String INVENTORY_QUEUE = "inventoryQueue";
+    public static final String INVENTORY_EXCHANGE = "inventoryExchange";
+    public static final String INVENTORY_KEY = "inventory.key";
+
+    @Bean
+    public Queue inventoryQueue() {
+        return new Queue(INVENTORY_QUEUE, true);
+    }
+
+    @Bean
+    public DirectExchange inventoryExchange() {
+        return new DirectExchange(INVENTORY_EXCHANGE);
+    }
+
+    @Bean
+    public Binding inventoryBinding(Queue inventoryQueue, DirectExchange inventoryExchange) {
+        return BindingBuilder.bind(inventoryQueue)
+                .to(inventoryExchange)
+                .with(INVENTORY_KEY);
+    }
 
     @Bean
     public MessageConverter messageConverter() {
-        return new Jackson2JsonMessageConverter();
+        Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
+        DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
+        typeMapper.setTrustedPackages("*");
+        converter.setJavaTypeMapper(typeMapper);
+        return converter;
     }
 }
 

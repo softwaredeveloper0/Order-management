@@ -41,11 +41,11 @@ public class InventoryEntity {
         return totalStock - reservedStock;
     }
 
-    @Version
-    private Long version;
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @Version
+    private Long version;
 
     public InventoryEntity() {
     }
@@ -97,6 +97,7 @@ public class InventoryEntity {
     public void setVersion(Long version) {
         this.version = version;
     }
+    
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
